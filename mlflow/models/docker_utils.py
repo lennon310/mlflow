@@ -33,7 +33,7 @@ RUN curl https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh >
 RUN bash ./miniconda.sh -b -p /miniconda; rm ./miniconda.sh;
 ENV PATH="/miniconda/bin:$PATH"
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-
+ENV GUNICORN_CMD_ARGS="--timeout 60 -k gevent"
 # Set up the program in the image
 WORKDIR /opt/mlflow
 
@@ -49,6 +49,7 @@ def _get_mlflow_install_step(dockerfile_context_dir, mlflow_home):
     Get docker build commands for installing MLflow given a Docker context dir and optional source
     directory
     """
+    mlflow_home = "/Users/zhunxu/mlflow"
     if mlflow_home:
         mlflow_dir = _copy_project(
             src_path=mlflow_home, dst_path=dockerfile_context_dir)
